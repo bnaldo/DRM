@@ -30,3 +30,10 @@ def test_list_courses(client):
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 2
+
+
+def test_homepage_lists_courses(client):
+    client.post("/courses", json={"title": "HTML Course", "description": "Desc"})
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "HTML Course" in response.text

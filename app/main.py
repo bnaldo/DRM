@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from typing import List
 
 from .models import Course, CourseCreate, Lesson
@@ -7,6 +8,15 @@ app = FastAPI(title="Mini Teachable API")
 
 courses: List[Course] = []
 course_id_counter = 1
+
+
+@app.get("/", response_class=HTMLResponse)
+def home() -> str:
+    items = "".join(f"<li>{c.title}</li>" for c in courses)
+    return (
+        "<html><head><title>Mini Teachable</title></head><body>"
+        "<h1>Courses</h1><ul>" + items + "</ul></body></html>"
+    )
 
 
 @app.get("/courses", response_model=List[Course])
